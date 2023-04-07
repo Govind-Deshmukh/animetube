@@ -6,6 +6,7 @@ import TopAir from "./components/home/topair";
 import Movies from "./components/home/movies";
 import Tv from "./components/home/tv";
 import GetDetails from "./components/home/getDetails";
+import Player from "./components/home/player/player";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/top-air" element={<TopAir />} />
           <Route path="/search:query" element={<Movies />} />
           <Route path="/anime/:animeId" element={<GetDetails />} />
+          <Route path="/watch" element={<Player />} />
         </Routes>
       </Router>
     </div>
