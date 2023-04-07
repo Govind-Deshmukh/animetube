@@ -6,6 +6,7 @@ export default function GetDetails() {
   const location = useLocation();
   const [pageError, setPageError] = useState(false);
   const [animeData, setAnimeData] = useState({});
+  const [loading, setLoading] = useState(true);
 
   try {
     useEffect(() => {
@@ -14,6 +15,7 @@ export default function GetDetails() {
         .then((res) => res.json())
         .then((data) => {
           setAnimeData(data);
+          setLoading(false);
         });
     }, []);
   } catch (err) {
@@ -21,7 +23,18 @@ export default function GetDetails() {
     setPageError(true);
   }
 
-  if (pageError) {
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="vh-100 d-flex justify-content-center align-items-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+          </div>
+        </div>
+      </>
+    );
+  } else if (pageError) {
     return (
       <div>
         <Navbar />

@@ -6,6 +6,7 @@ import image from "./404.gif";
 export default function Popular() {
   const [popular, setPopular] = useState([]);
   const [pageError, setPageError] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   try {
     useEffect(() => {
@@ -13,6 +14,7 @@ export default function Popular() {
         .then((res) => res.json())
         .then((data) => {
           setPopular(data);
+          setLoading(false);
         });
     }, []);
   } catch (err) {
@@ -20,7 +22,18 @@ export default function Popular() {
     setPageError(true);
   }
 
-  if (pageError) {
+  if (loading) {
+    return (
+      <>
+        <Navbar />
+        <div className="vh-100 d-flex justify-content-center align-items-center">
+          <div class="spinner-border text-primary" role="status">
+            <span class="sr-only"></span>
+          </div>
+        </div>
+      </>
+    );
+  } else if (pageError) {
     return (
       <div>
         <Navbar />
