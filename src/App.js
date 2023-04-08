@@ -20,8 +20,8 @@ function App() {
           <Route path="/popular" element={<Popular />} />
           <Route path="/top-air" element={<TopAir />} />
           <Route path="/search:query" element={<Movies />} />
-          <Route path="/anime/:animeId" element={<GetDetails />} />
-          <Route path="/watch/:animeId" element={<Player />} />
+          <Route path="/player/:animeId" element={<Player />} />
+          <Route path="/Details/:animeId" element={<GetDetails />} />
           <Route
             path="*"
             element={

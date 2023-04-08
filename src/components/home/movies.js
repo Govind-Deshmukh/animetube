@@ -2,27 +2,12 @@ import React, { useEffect, useState } from "react";
 import Navbar from "./navbar";
 import { Link } from "react-router-dom";
 import image from "./assets/404.gif";
-
+import { useContext } from "react";
+import CreateContext from "./context/CreateContext";
 export default function Movies() {
-  const [movies, setMovies] = useState([]);
-  const [pageError, setPageError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { movie, Loading, Error, setAnimeId } = useContext(CreateContext);
 
-  try {
-    useEffect(() => {
-      fetch("https://gogo.exampledev.xyz/anime-movies")
-        .then((res) => res.json())
-        .then((data) => {
-          setMovies(data);
-          setLoading(false);
-        });
-    }, []);
-  } catch (err) {
-    console.log(err);
-    setPageError(true);
-  }
-
-  if (loading) {
+  if (Loading) {
     return (
       <>
         <Navbar />
@@ -33,7 +18,7 @@ export default function Movies() {
         </div>
       </>
     );
-  } else if (pageError) {
+  } else if (Error) {
     return (
       <div>
         <Navbar />
@@ -49,7 +34,7 @@ export default function Movies() {
         <Navbar />
         <div className="container">
           <div className="row mt-2 mb-3">
-            {movies.map((movie) => (
+            {movie.map((movie) => (
               <div className="col-md-3 mt-2 mb-1 card-deck">
                 <div className="card" style={{ width: "18rem" }}>
                   <img
@@ -65,9 +50,10 @@ export default function Movies() {
                     </h5>
 
                     <Link
-                      to={`/anime/${movie.animeId}`}
+                      to={`/Details/${movie.animeId}`}
                       value={movie.animeId}
                       className="btn btn-primary"
+                      onClick={() => setAnimeId(movie.animeId)}
                     >
                       Watch
                     </Link>
