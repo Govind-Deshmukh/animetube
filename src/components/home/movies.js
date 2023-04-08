@@ -3,7 +3,7 @@ import Navbar from "./navbar";
 import { Link } from "react-router-dom";
 import image from "./assets/404.gif";
 import { useContext } from "react";
-import CreateContext from "./Contest/CreateContext";
+import CreateContext from "./context/CreateContext";
 export default function Movies() {
   const { movie, Loading, Error, setAnimeId } = useContext(CreateContext);
 
