@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./navbar";
-import { useLocation, useParams } from "react-router-dom";
-import image from "./404.gif";
-import swal from "sweetalert";
+import { useLocation } from "react-router-dom";
+import image from "./assets/404.gif";
+
+import { Link } from "react-router-dom";
 export default function GetDetails() {
   const location = useLocation();
   const [pageError, setPageError] = useState(false);
@@ -60,36 +61,35 @@ export default function GetDetails() {
           <div className="row">
             <div className="col-md-8">
               <div className="card text-center shadow shadow-lg">
+                <div className="card-footer text-muted">
+                  Release : {animeData.releasedDate} || Status :{" "}
+                  {animeData.status} || Type : {animeData.type}
+                  <hr />
+                  Genres :{" "}
+                  <strong>
+                    {animeData.genres
+                      ? animeData.genres.join(", ")
+                      : "Loding . . ."}{" "}
+                  </strong>
+                  || Total Episodes : {animeData.totalEpisodes}
+                </div>
                 <div className="card-body">
-                  <h2 className="card-title font-weight-bold">
-                    {animeData.animeTitle}
-                  </h2>
                   <img
                     className="card-img-top"
                     style={{ width: "50%" }}
                     src={animeData.animeImg}
                     alt="Loding anime image . . . "
                   ></img>
+                  <h1 className="card-title font-weight-bold">
+                    {animeData.animeTitle}
+                  </h1>
                   <p className="card-text text-md-left mt-2 mb-2">
                     {animeData.synopsis}
                   </p>
-                  <a href="#" className="btn btn-primary">
-                    Go somewhere
-                  </a>
-                </div>
-                <div className="card-footer text-muted">
-                  Release : {animeData.releasedDate} || Status :{" "}
-                  {animeData.status} || Type : {animeData.type}
-                  <hr />
-                  Genres :{" "}
-                  {animeData.genres
-                    ? animeData.genres.join(", ")
-                    : "Loding . . ."}{" "}
-                  || Total Episodes : {animeData.totalEpisodes}
                 </div>
               </div>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-4 mt-2">
               <div className="card shadow shadow-lg">
                 <div className="card-body">
                   <div className="mt-2 mb-2">
@@ -97,14 +97,13 @@ export default function GetDetails() {
                     <hr />
                     {animeData.episodesList
                       ? animeData.episodesList.map((ep) => (
-                          <a
-                            href={ep.episodeLink}
+                          <Link
+                            to={`/watch/${ep.episodeId}`}
+                            value={ep.animeId}
                             className="btn badge badge-dark bg-dark text-light m-1 mb-1"
-                            target="_blank"
-                            rel="noreferrer"
                           >
                             Episode {ep.episodeNum}
-                          </a>
+                          </Link>
                         ))
                       : "Loding . . ."}
                   </div>

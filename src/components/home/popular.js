@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./navbar";
 import { Link } from "react-router-dom";
-import image from "./404.gif";
+import image from "./assets/404.gif";
 
 export default function Popular() {
   const [popular, setPopular] = useState([]);

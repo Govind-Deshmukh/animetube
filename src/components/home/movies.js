@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "./navbar";
 import { Link } from "react-router-dom";
-import image from "./404.gif";
-import { Nav } from "react-bootstrap";
+import image from "./assets/404.gif";
 
 export default function Movies() {
   const [movies, setMovies] = useState([]);
@@ -51,7 +50,7 @@ export default function Movies() {
         <div className="container">
           <div className="row mt-2 mb-3">
             {movies.map((movie) => (
-              <div className="col-md-3 mt-1 mb-1">
+              <div className="col-md-3 mt-2 mb-1 card-deck">
                 <div className="card" style={{ width: "18rem" }}>
                   <img
                     className="card-img-top"

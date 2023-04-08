@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "./navbar";
-import image from "./404.gif";
+import image from "./assets/404.gif";
+
 export default function tv() {
   return (
     <div>

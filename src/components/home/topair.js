@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./navbar";
 import { Link } from "react-router-dom";
-import image from "./404.gif";
+import image from "./assets/404.gif";
+
 export default function Topair() {
   const [topair, setTopair] = useState([]);
   const [pageError, setPageError] = useState(false);
@@ -47,7 +48,7 @@ export default function Topair() {
         <div className="container">
           <div className="row mt-2 mb-3">
             {topair.map((top) => (
-              <div className="col-md-3 mt-1 mb-1">
+              <div className="col-md-3 mt-2 mb-1 card-deck">
                 <div className="card" style={{ width: "18rem" }}>
                   <img
                     className="card-img-top"

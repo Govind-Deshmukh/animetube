@@ -21,7 +21,15 @@ function App() {
           <Route path="/top-air" element={<TopAir />} />
           <Route path="/search:query" element={<Movies />} />
           <Route path="/anime/:animeId" element={<GetDetails />} />
-          <Route path="/watch" element={<Player />} />
+          <Route path="/watch/:animeId" element={<Player />} />
+          <Route
+            path="*"
+            element={
+              <>
+                <h1>404 Page not found</h1>
+              </>
+            }
+          />
         </Routes>
       </Router>
     </div>
