@@ -1,26 +1,14 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect } from "react";
 import Navbar from "./navbar";
 import { Link } from "react-router-dom";
 import image from "./assets/404.gif";
-
+import { useContext } from "react";
+import CreateContext from "./Contest/CreateContext";
 export default function Topair() {
-  const [topair, setTopair] = useState([]);
-  const [pageError, setPageError] = useState(false);
-  const [loading, setLoading] = useState(true);
-  try {
-    useEffect(() => {
-      fetch("https://gogo.exampledev.xyz/top-airing")
-        .then((res) => res.json())
-        .then((data) => {
-          setTopair(data);
-          setLoading(false);
-        });
-    }, []);
-  } catch (err) {
-    console.log(err);
-    setPageError(true);
-  }
-  if (loading) {
+  const { TopRated, Loading, Error, setAnimeId } = useContext(CreateContext);
+
+  if (Loading) {
     return (
       <>
         <Navbar />
@@ -31,7 +19,7 @@ export default function Topair() {
         </div>
       </>
     );
-  } else if (pageError) {
+  } else if (Error) {
     return (
       <div>
         <Navbar />
@@ -47,7 +35,7 @@ export default function Topair() {
         <Navbar />
         <div className="container">
           <div className="row mt-2 mb-3">
-            {topair.map((top) => (
+            {TopRated.map((top) => (
               <div className="col-md-3 mt-2 mb-1 card-deck">
                 <div className="card" style={{ width: "18rem" }}>
                   <img
@@ -62,9 +50,10 @@ export default function Topair() {
                     </h5>
 
                     <Link
-                      to={`/anime/${top.animeId}`}
+                      to={`/Details/${top.animeId}`}
                       value={top.animeId}
                       className="btn btn-primary"
+                      onClick={() => setAnimeId(top.animeId)}
                     >
                       Watch
                     </Link>

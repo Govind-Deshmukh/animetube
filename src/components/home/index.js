@@ -1,29 +1,16 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
 import Navbar from "./navbar";
 import { Link } from "react-router-dom";
 import image from "./assets/404.gif";
 import "./assets/index.css";
+import { useContext } from "react";
+import CreateContext from "./Contest/CreateContext";
 export default function Index() {
-  const [resentanime, setResentAnime] = useState([]);
-  const [pageerror, setPageError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { resentrelese, Loading, Error, setAnimeId } =
+    useContext(CreateContext);
 
-  useEffect(() => {
-    try {
-      setLoading(true);
-      fetch("https://gogo.exampledev.xyz/recent-release")
-        .then((res) => res.json())
-        .then((data) => {
-          setResentAnime(data);
-          setLoading(false);
-        });
-    } catch (err) {
-      console.log(err);
-      setPageError(true);
-    }
-  }, []);
-
-  if (loading) {
+  if (Loading) {
     return (
       <div>
         <Navbar />
@@ -54,7 +41,7 @@ export default function Index() {
         </div>
       </div>
     );
-  } else if (pageerror) {
+  } else if (Error) {
     return (
       <div>
         <Navbar />
@@ -94,7 +81,7 @@ export default function Index() {
           <hr />
           <div className="row mt-2 mb-5">
             <div className="card-group">
-              {resentanime.map((ra) => (
+              {resentrelese.map((ra) => (
                 <div className="card-group col">
                   <div className="card cardbox m-4">
                     <img
@@ -108,9 +95,10 @@ export default function Index() {
                       </h5>
 
                       <Link
-                        to={`/anime/${ra.animeId}`}
+                        to={`/Details/${ra.animeId}`}
                         value={ra.animeId}
                         className="btn btn-primary"
+                        onClick={() => setAnimeId(ra.animeId)}
                       >
                         Watch
                       </Link>

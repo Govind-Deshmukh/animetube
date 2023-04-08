@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
+/* eslint-disable jsx-a11y/iframe-has-title */
 import Navbar from "../navbar";
 import "./player.css";
 import React, { useEffect, useState } from "react";
@@ -6,36 +8,32 @@ import image from "../assets/404.gif";
 
 export default function Player() {
   const location = useLocation();
-  const [pageError, setPageError] = useState(false);
-  const [animeData, setAnimeData] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [notfound, setnotfound] = useState(false);
+  const AnimiId = location.pathname.split("/")[2];
+  console.log(AnimiId);
+  const [AnimeData, setAnimeData] = useState({});
+  const [Error, setError] = useState(false);
+  const [Loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetchAnime = async () => {
+      setLoading(true);
+      setError(false);
 
-  try {
-    useEffect(() => {
-      let animeID = location.pathname.split("/")[2];
-      console.log(animeID);
-      const url = "https://gogo.exampledev.xyz/vidcdn/watch/" + animeID;
-      console.log(url);
-      fetch(url)
-        .then((res) => res.json())
-        .then((data) => {
-          setAnimeData(data);
-          setLoading(false);
-          if (data.error.status == 404) {
-            setnotfound(true);
-            console.log("anime not found");
-          } else {
-            setnotfound(false);
-          }
-        });
-    }, []);
-  } catch (err) {
-    console.log(err);
-    setPageError(true);
-  }
+      try {
+        const response = await fetch(
+          `https://gogo.exampledev.xyz/vidcdn/watch/${AnimiId}`
+        );
+        const data = await response.json();
+        setAnimeData(data);
+        setLoading(false);
+      } catch (error) {
+        setError(true);
+        setLoading(false);
+      }
+    };
+    fetchAnime();
+  }, [AnimiId]);
 
-  if (loading) {
+  if (Loading) {
     return (
       <>
         <Navbar />
@@ -46,7 +44,7 @@ export default function Player() {
         </div>
       </>
     );
-  } else if (pageError || notfound) {
+  } else if (Error) {
     return (
       <div>
         <Navbar />
@@ -68,7 +66,7 @@ export default function Player() {
                 <iframe
                   width="100%"
                   className="embed-responsive-item videoBox"
-                  src={animeData.Referer}
+                  src={AnimeData.Referer}
                 ></iframe>
               </div>
             </div>

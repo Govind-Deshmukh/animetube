@@ -1,28 +1,14 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect } from "react";
 import Navbar from "./navbar";
 import { Link } from "react-router-dom";
 import image from "./assets/404.gif";
-
+import { useContext } from "react";
+import CreateContext from "./Contest/CreateContext";
 export default function Popular() {
-  const [popular, setPopular] = useState([]);
-  const [pageError, setPageError] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const { Popular, Loading, Error, setAnimiId } = useContext(CreateContext);
 
-  try {
-    useEffect(() => {
-      fetch("https://gogo.exampledev.xyz/popular")
-        .then((res) => res.json())
-        .then((data) => {
-          setPopular(data);
-          setLoading(false);
-        });
-    }, []);
-  } catch (err) {
-    console.log(err);
-    setPageError(true);
-  }
-
-  if (loading) {
+  if (Loading) {
     return (
       <>
         <Navbar />
@@ -33,7 +19,7 @@ export default function Popular() {
         </div>
       </>
     );
-  } else if (pageError) {
+  } else if (Error) {
     return (
       <div>
         <Navbar />
@@ -49,7 +35,7 @@ export default function Popular() {
         <Navbar />
         <div className="container">
           <div className="row mt-2 mb-3">
-            {popular.map((pop) => (
+            {Popular.map((pop) => (
               <div className="col-md-3 mt-1 mb-1">
                 <div className="card" style={{ width: "18rem" }}>
                   <img
@@ -63,9 +49,10 @@ export default function Popular() {
                     </h5>
 
                     <Link
-                      to={`/anime/${pop.animeId}`}
+                      to={`/Details/${pop.animeId}`}
                       value={pop.animeId}
                       className="btn btn-primary"
+                      onClick={() => setAnimiId(pop.animeId)}
                     >
                       Watch
                     </Link>
