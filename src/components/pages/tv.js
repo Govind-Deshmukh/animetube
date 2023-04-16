@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "./navbar";
+import Navbar from "../navbar";
 import image from "./assets/404.gif";
 
 export default function tv() {
@@ -10,6 +10,7 @@ export default function tv() {
         <img src={image} alt="404 image"></img>
         <h2 className="mt-2">This page is under development</h2>
       </div>
+      <Navbar />
     </div>
   );
 }
