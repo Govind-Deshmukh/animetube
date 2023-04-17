@@ -32,14 +32,15 @@ export default function Movies() {
     return (
       <div>
         <Navbar />
-        <div className="container">
+
+        {/* <div className="container">
           <div className="row mt-2 mb-3">
             {movie.map((movie) => (
               <div className="col-md-3 mt-2 mb-1 card-deck">
                 <div className="card" style={{ width: "18rem" }}>
-                  <img
-                    className="card-img-top"
-                    src={movie.animeImg}
+                  <im/g
+                    className="card-img-top/"
+                    src={movie.animeImg/}
                     alt="Card image cap"
                   />
                   <div className="card-body">
@@ -65,7 +66,7 @@ export default function Movies() {
               </div>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     );
   }
