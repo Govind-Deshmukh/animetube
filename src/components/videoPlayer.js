@@ -12,6 +12,7 @@ export default function VideoPlayer() {
   const [Error, setError] = useState(false);
   const [Loading, setLoading] = useState(true);
   const [animeId, setAnimeId] = useState("");
+  const [episodeId, setEpisodeId] = useState("");
 
   useEffect(() => {
     const fetchAnime = async () => {
@@ -21,6 +22,7 @@ export default function VideoPlayer() {
         const AnimeId = location.pathname.split("/")[2];
         const epid = location.pathname.split("/")[3];
         setAnimeId(AnimeId);
+        setEpisodeId(epid);
         const response = await fetch(
           `https://gogo.exampledev.xyz/vidcdn/watch/${epid}`
         );
@@ -86,6 +88,9 @@ export default function VideoPlayer() {
                       ? animeData.genres.join(", ")
                       : "Loding . . ."}
                   </strong>
+                  <br />
+                  You are watching :{" "}
+                  <strong>{episodeId.split("-").slice(-2)}</strong>
                 </div>
                 <div className="card-body">
                   <h3 className="card-title text-center">
@@ -143,13 +148,13 @@ export default function VideoPlayer() {
                 <hr />
                 {animeData.episodesList ? (
                   animeData.episodesList.map((ep) => (
-                    <Link
-                      to={`/watch/${animeId}/${ep.episodeId}`}
+                    <a
+                      href={`/watch/${animeId}/${ep.episodeId}`}
                       value={ep.animeId}
                       className="btn badge badge-light bg-light text-dark m-1 mb-1"
                     >
                       Episode {ep.episodeNum}
-                    </Link>
+                    </a>
                   ))
                 ) : (
                   <div

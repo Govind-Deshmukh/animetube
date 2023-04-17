@@ -14,6 +14,36 @@ export default function Movies() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handelPageChange = (e, pageNumber) => {
+    e.preventDefault();
+    if (pageNumber <= 0 || pageNumber > 50) {
+      setCurrentPage(1);
+    } else {
+      setCurrentPage(pageNumber);
+    }
+    onPageChange(pageNumber);
+  };
+
+  const onPageChange = (pageNumber) => {
+    const fetchAnime = async () => {
+      setError(false);
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `https://gogo.exampledev.xyz/anime-movies?page=${pageNumber}`
+        );
+        const data = await response.json();
+        setMovies(data);
+        setLoading(false);
+      } catch (error) {
+        setError(true);
+        setLoading(false);
+      }
+    };
+    fetchAnime();
+  };
 
   useEffect(() => {
     try {
@@ -57,7 +87,7 @@ export default function Movies() {
       <div>
         <Navbar />
         <div className="container mt-3 mb-5">
-          <h2 className="text-center mb-2">Anime Movies</h2>
+          <h2 className="text-center mb-2">Anime Movies page {currentPage}</h2>
           <div className="row ">
             {movies.map((anime) => (
               <Link
@@ -106,6 +136,32 @@ export default function Movies() {
               </Link>
             ))}
           </div>
+        </div>
+        <div className="d-flex justify-content-center">
+          <nav aria-label="...">
+            <ul className="pagination">
+              <li
+                className={`page-item ${currentPage === 1 ? " disabled" : ""}`}
+              >
+                <span
+                  className="page-link"
+                  disabled={currentPage === 1 ? true : false}
+                  onClick={(e) => handelPageChange(e, currentPage - 1)}
+                >
+                  {"<<"}Previous
+                </span>
+              </li>
+
+              <li className="page-item">
+                <a
+                  className="page-link"
+                  onClick={(e) => handelPageChange(e, currentPage + 1)}
+                >
+                  Next {">>"}
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
         <Footer />
       </div>

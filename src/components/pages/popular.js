@@ -14,7 +14,36 @@ export default function Popular() {
   const [popular, setPopular] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
+  const handelPageChange = (e, pageNumber) => {
+    e.preventDefault();
+    if (pageNumber <= 0 || pageNumber > 500) {
+      setCurrentPage(1);
+    } else {
+      setCurrentPage(pageNumber);
+    }
+    onPageChange(pageNumber);
+  };
+
+  const onPageChange = (pageNumber) => {
+    const fetchAnime = async () => {
+      setError(false);
+      setLoading(true);
+      try {
+        const response = await fetch(
+          `https://gogo.exampledev.xyz/popular?page=${pageNumber}`
+        );
+        const data = await response.json();
+        setPopular(data);
+        setLoading(false);
+      } catch (error) {
+        setError(true);
+        setLoading(false);
+      }
+    };
+    fetchAnime();
+  };
   useEffect(() => {
     try {
       setLoading(true);
@@ -56,7 +85,7 @@ export default function Popular() {
       <div>
         <Navbar />
         <div className="container mt-3 mb-5">
-          <h2 className="text-center mb-2">Popular Anime</h2>
+          <h2 className="text-center mb-2">Popular Anime page {currentPage}</h2>
           <div className="row ">
             {popular.map((anime) => (
               <Link
@@ -105,6 +134,33 @@ export default function Popular() {
               </Link>
             ))}
           </div>
+        </div>
+
+        <div className="d-flex justify-content-center">
+          <nav aria-label="...">
+            <ul className="pagination">
+              <li
+                className={`page-item ${currentPage === 1 ? " disabled" : ""}`}
+              >
+                <span
+                  className="page-link"
+                  disabled={currentPage === 1 ? true : false}
+                  onClick={(e) => handelPageChange(e, currentPage - 1)}
+                >
+                  {"<<"}Previous
+                </span>
+              </li>
+
+              <li className="page-item">
+                <a
+                  className="page-link"
+                  onClick={(e) => handelPageChange(e, currentPage + 1)}
+                >
+                  Next {">>"}
+                </a>
+              </li>
+            </ul>
+          </nav>
         </div>
         <Footer />
       </div>

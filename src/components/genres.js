@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+
 import Navbar from "./navbar";
 import Footer from "./footer";
 import LoadingSpinner from "./loadingSpinner";
@@ -7,10 +10,8 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { Form, FormControl, Button } from "react-bootstrap";
 const genres = [
   "action",
   "adventure",
@@ -61,36 +62,8 @@ const genres = [
   "yuri",
 ];
 
-const useStyles = makeStyles((theme) => ({
-  jumbotron: {
-    backgroundColor: "#e9e9e9",
-    padding: theme.spacing(4),
-    marginBottom: theme.spacing(4),
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-    [theme.breakpoints.up("md")]: {
-      minHeight: 250,
-    },
-  },
-  jumbotronTitle: {
-    fontWeight: "bold",
-    marginBottom: theme.spacing(2),
-    textAlign: "center",
-  },
-  jumbotronSubtitle: {
-    marginBottom: theme.spacing(4),
-    textAlign: "center",
-  },
-  jumbotronButton: {
-    marginTop: theme.spacing(2),
-  },
-}));
-
 function Jumbotron() {
   const classes = useStyles();
-  const [searchKeyword, setSearchKeyword] = useState("");
 
   return (
     <div className={classes.jumbotron}>
@@ -123,59 +96,57 @@ function Jumbotron() {
       <div className="mt-2 mb-3">
         <p className="text-muted text-center">Search anime by genre</p>
         {genres.map((genre) => (
-          <Link
-            to={`/genre/${genre}`}
+          <a
+            href={`/genre/${genre}`}
             style={{ textDecoration: "None", color: "inherit" }}
             className="btn badge badge-dark bg-dark text-light m-1 mb-1"
           >
             {genre}
-          </Link>
+          </a>
         ))}
-      </div>
-      <div>
-        <FormControl
-          type="text"
-          placeholder="Search"
-          className="mr-sm-2"
-          value={searchKeyword}
-          onChange={(e) => setSearchKeyword(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              window.location.href = `/search/${searchKeyword}`;
-            }
-          }}
-        />
       </div>
     </div>
   );
 }
+const useStyles = makeStyles((theme) => ({
+  jumbotron: {
+    backgroundColor: "#e9e9e9",
+    padding: theme.spacing(4),
+    marginBottom: theme.spacing(4),
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+    [theme.breakpoints.up("md")]: {
+      minHeight: 250,
+    },
+  },
+  jumbotronTitle: {
+    fontWeight: "bold",
+    marginBottom: theme.spacing(2),
+    textAlign: "center",
+  },
+  jumbotronSubtitle: {
+    marginBottom: theme.spacing(4),
+    textAlign: "center",
+  },
+  jumbotronButton: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
-export default function Index() {
-  const [recentRelease, setRecentRelease] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function Genres() {
+  const location = useLocation();
+  const [animeData, setAnimeData] = useState({});
   const [error, setError] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [searchedGenere, setSearchedGenere] = useState("");
 
-  useEffect(() => {
-    try {
-      setLoading(true);
-      fetch("https://gogo.exampledev.xyz/recent-release")
-        .then((res) => res.json())
-        .then((data) => {
-          setRecentRelease(data);
-          setLoading(false);
-        });
-    } catch (err) {
-      console.log(err);
-      setError(true);
-      setLoading(false);
-    }
-  }, []);
   const [currentPage, setCurrentPage] = useState(1);
 
   const handelPageChange = (e, pageNumber) => {
     e.preventDefault();
-    if (pageNumber <= 0 || pageNumber > 25) {
+    if (pageNumber <= 0 || pageNumber > 20) {
       setCurrentPage(1);
     } else {
       setCurrentPage(pageNumber);
@@ -188,11 +159,13 @@ export default function Index() {
       setError(false);
       setLoading(true);
       try {
+        const genres = location.pathname.split("/")[2];
+        setSearchedGenere(genres);
         const response = await fetch(
-          `https://gogo.exampledev.xyz/recent-release?page=${pageNumber}`
+          `https://gogo.exampledev.xyz/genre/${genres}?page=${pageNumber}`
         );
         const data = await response.json();
-        setRecentRelease(data);
+        setAnimeData(data);
         setLoading(false);
       } catch (error) {
         setError(true);
@@ -201,6 +174,27 @@ export default function Index() {
     };
     fetchAnime();
   };
+
+  useEffect(() => {
+    const fetchAnime = async () => {
+      setError(false);
+      setLoading(true);
+      try {
+        const genres = location.pathname.split("/")[2];
+        setSearchedGenere(genres);
+        const response = await fetch(
+          `https://gogo.exampledev.xyz/genre/${genres}`
+        );
+        const data = await response.json();
+        setAnimeData(data);
+        setLoading(false);
+      } catch (error) {
+        setError(true);
+        setLoading(false);
+      }
+    };
+    fetchAnime();
+  }, []);
 
   if (loading) {
     return (
@@ -225,12 +219,12 @@ export default function Index() {
       <div>
         <Navbar />
         <Jumbotron />
-        <div className="container mt-3 mb-5" id="#recent">
+        <div className="container mt-3 mb-3" id="#recent">
           <h2 className="text-center mb-2">
-            Recent Release page {currentPage}
+            Search result for {searchedGenere} page {currentPage}
           </h2>
           <div className="row ">
-            {recentRelease.map((anime) => (
+            {animeData.map((anime) => (
               <Link
                 className="col mb-1 mt-1 card-group"
                 to={`/anime/${anime.animeId}`}

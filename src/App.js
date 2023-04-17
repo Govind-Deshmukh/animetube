@@ -12,6 +12,8 @@ import Tv from "./components/pages/tv";
 // player pages
 import GetDetails from "./components/animeDetails";
 import VideoPlayer from "./components/videoPlayer";
+import Genres from "./components/genres";
+import Search from "./components/search";
 
 // policy pages import
 import Contact from "./components/policyPages/contact";
@@ -40,6 +42,8 @@ function App() {
             <Route path="/tv" element={<Tv />} />
 
             <Route path="/anime/:animeId" element={<GetDetails />} />
+            <Route path="/genre/:genres" element={<Genres />} />
+            <Route path="/search/:keyw" element={<Search />} />
             <Route
               path="/watch/:animeId/:animeEpId"
               element={<VideoPlayer />}
